@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import { ListGroup, ListGroupItem } from 'reactstrap'
 
 export default class CategoryList extends Component {
-    ß
     state = {
         categories: [],
-        currentCategory: "Null"
+        currentCategory: ""
     };
     changeCategory = (catName) => {
         this.setState({ currentCategory: catName })
@@ -24,7 +23,7 @@ export default class CategoryList extends Component {
                 <h2>{this.props.info.title}</h2>
                 <ListGroup>
                     {this.state.categories.map(category => (
-                        <ListGroupItem onClick={() => this.changeCategory(category.categoryName)} >{category.categoryName}</ListGroupItem>
+                        <ListGroupItem key = {category.id} onClick={() => this.props.changeCategory(category)} >{category.categoryName}</ListGroupItem>
                     ))}
                 </ListGroup>
                 <h4>{this.state.currentCategory}</h4>
