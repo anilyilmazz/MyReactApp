@@ -5,6 +5,10 @@ import CategoryList from './CategoryList';
 import ProductList from './ProductList';
 import { Container, Row, Col } from 'reactstrap';
 import alertify from 'alertifyjs';
+import { Route, Switch } from 'react-router-dom';
+import NotFound from './NotFound';
+import CartList from './CartList';
+
 
 export default class App extends Component {
   state = { currentCategory: "", products: [], cart: [] }
@@ -20,8 +24,8 @@ export default class App extends Component {
   }
   removeFromCart = (product) => {
     let newCart = this.state.cart.filter(x => x.product.id !== product.id);
-    this.setState({cart : newCart});
-  } 
+    this.setState({ cart: newCart });
+  }
   changeCategory = category => {
     this.setState({ currentCategory: category.categoryName });
     this.getProducts(category.id);
@@ -42,7 +46,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <Container>
-          <Navi removeFromCart = {this.removeFromCart} cart={this.state.cart} className="Navi"></Navi>
+          <Navi removeFromCart={this.removeFromCart} cart={this.state.cart} className="Navi"></Navi>
           <Row>
             <Col xs="3">
               <CategoryList currentCategory={this.state.currentCategory}
@@ -51,11 +55,20 @@ export default class App extends Component {
               </CategoryList>
             </Col>
             <Col xs="9">
-              <ProductList info={productModel}
-                products={this.state.products}
-                currentCategory={this.state.currentCategory}
-                addtoCart={this.addtoCart}
-              ></ProductList>
+              <Switch>
+                <Route exact path="/" render={props =>
+                  <ProductList 
+                    {...props}
+                    info={productModel}
+                    products={this.state.products}
+                    currentCategory={this.state.currentCategory}
+                    addtoCart={this.addtoCart}
+                  ></ProductList>
+                } />
+                <Route exact path="/Cart" component={CartList} />
+                <Route component={NotFound} />
+              </Switch>
+
             </Col>
           </Row>
         </Container>
